@@ -445,4 +445,3 @@ struct P1Parser {
 
 } // namespace dsmr
 
-#endif // DSMR_INCLUDE_PARSER_H
