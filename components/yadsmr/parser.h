@@ -324,7 +324,7 @@ struct P1Parser {
     * pointer in the result will indicate the next unprocessed byte.
     */
   template <typename... Ts>
-  static ParseResult<void> parse(ParsedData<Ts...> *data, const char *str, size_t n, bool unknown_error = false) {
+  static ParseResult<void> parse(ParsedData<Ts...> *data, const char *str, size_t n, bool unknown_error = false, bool check_crc = true) {
     ParseResult<void> res;
     if (!n || str[0] != '/')
       return res.fail(F("Data should start with /"), str);
@@ -332,33 +332,42 @@ struct P1Parser {
     // Skip /
     const char *data_start = str + 1;
 
-    // Look for ! that terminates the data
-    const char *data_end = data_start;
-    uint16_t crc = _crc16_update(0, *str); // Include the / in CRC
-    while (data_end < str + n && *data_end != '!') {
-      crc = _crc16_update(crc, *data_end);
-      ++data_end;
-    }
+     if (check_crc)
+      {
+        uint16_t crc = _crc16_update(0, *str); // Include the / in CRC
+        while (data_end < str + n && *data_end != '!')
+        {
+          crc = _crc16_update(crc, *data_end);
+          ++data_end;
+        }
+        if (data_end >= str + n)
+          return res.fail("No checksum found", data_end);
 
-    if (data_end >= str + n)
-      return res.fail(F("No checksum found"), data_end);
+        crc = _crc16_update(crc, *data_end); // Include the ! in CRC
 
-    crc = _crc16_update(crc, *data_end); // Include the ! in CRC
+        ParseResult<uint16_t> check_res = CrcParser::parse(data_end + 1, str + n);
+        if (check_res.err)
+          return check_res;
 
-    ParseResult<uint16_t> check_res = CrcParser::parse(data_end + 1, str + n);
-    if (check_res.err)
-      return check_res;
+        // Check CRC
+        if (check_res.result != crc)
+        {
+          return res.fail("Checksum mismatch", data_end + 1);
+        }
+        res = parse_data(data, data_start, data_end, unknown_error);
+        res.next = check_res.next;
+      }
+      else
+      {
+        while (data_end < str + n && *data_end != '!')
+        {
+          ++data_end;
+        }
 
-    // Check CRC
-    if (check_res.result != crc) {
-      // log expected checksum, convenient for creating test data
-      // Serial.printf("Checksum mismatch %x != %x\n", check_res.result, crc); 
-      return res.fail(F("Checksum mismatch"), data_end + 1);
-    }
-
-    res = parse_data(data, data_start, data_end, unknown_error);
-    res.next = check_res.next;
-    return res;
+        res = parse_data(data, data_start, data_end, unknown_error);
+        res.next = data_end;
+      }
+      return res;
   }
 
   /**
