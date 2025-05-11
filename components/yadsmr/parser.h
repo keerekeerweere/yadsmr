@@ -114,7 +114,7 @@ struct ParsedData<T, Ts...> : public T, ParsedData<Ts...> {
   parse_line_inlined(const ObisId& id, const char *str, const char *end) {
     if (id == T::id) {
       if (T::present())
-        return ParseResult<void>().fail((const __FlashStringHelper*)DUPLICATE_FIELD, str);
+        return ParseResult<void>().fail(DUPLICATE_FIELD, str);
       T::present() = true;
       return T::parse(str, end);
     }
@@ -190,7 +190,7 @@ struct NumParser {
     // Parse integer part
     while(num_end < end && !strchr("*.)", *num_end)) {
       if (*num_end < '0' || *num_end > '9')
-        return res.fail((const __FlashStringHelper*)INVALID_NUMBER, num_end);
+        return res.fail(INVALID_NUMBER, num_end);
       value *= 10;
       value += *num_end - '0';
       ++num_end;
@@ -203,7 +203,7 @@ struct NumParser {
       while(num_end < end && !strchr("*)", *num_end) && max_decimals) {
         --max_decimals;
         if (*num_end < '0' || *num_end > '9')
-          return res.fail((const __FlashStringHelper*)INVALID_NUMBER, num_end);
+          return res.fail(INVALID_NUMBER, num_end);
         value *= 10;
         value += *num_end - '0';
         ++num_end;
@@ -227,18 +227,18 @@ struct NumParser {
             return res.succeed(value).until(num_end + 1); // Skip )
           else
             // something else 
-            return res.fail((const __FlashStringHelper*)INVALID_UNIT, num_end);
+            return res.fail(INVALID_UNIT, num_end);
       }
 
       const char *unit_start = ++num_end; // skip *
       while(num_end < end && *num_end != ')' && *unit) {
         // Next character in units do not match?
         if (*num_end++ != *unit++)
-          return res.fail((const __FlashStringHelper*)INVALID_UNIT, unit_start);
+          return res.fail(INVALID_UNIT, unit_start);
       }
       // At the end of the message unit, but not the passed unit?
       if (*unit)
-        return res.fail((const __FlashStringHelper*)INVALID_UNIT, unit_start);
+        return res.fail(INVALID_UNIT, unit_start);
     }
 
     if (num_end >= end || *num_end != ')')
