@@ -28,8 +28,7 @@
  * Various utility functions
  */
 
-#ifndef DSMR_INCLUDE_UTIL_H
-#define DSMR_INCLUDE_UTIL_H
+#pragma once
 
 #ifdef ARDUINO_ARCH_ESP8266
 #define DSMR_PROGMEM
@@ -183,4 +182,3 @@ struct ObisId {
 
 } // namespace dsmr
 
-#endif // DSMR_INCLUDE_UTIL_H
