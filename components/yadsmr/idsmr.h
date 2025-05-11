@@ -31,9 +31,9 @@
 
 #pragma once
 
-#include "dsmr/parser.h"
-#include "dsmr/reader.h"
-#include "dsmr/fields.h"
+#include "idsmr/parser.h"
+#include "idsmr/reader.h"
+#include "idsmr/fields.h"
 
 // Allow using everything without the namespace prefixes
 using namespace dsmr;
