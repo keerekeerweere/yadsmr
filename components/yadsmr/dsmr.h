@@ -29,8 +29,7 @@
  * imported into global scope
  */
 
-#ifndef DSMR_INCLUDE_DSMR_H
-#define DSMR_INCLUDE_DSMR_H
+#pragma once
 
 #include "dsmr/parser.h"
 #include "dsmr/reader.h"
@@ -40,4 +39,3 @@
 using namespace dsmr;
 using namespace dsmr::fields;
 
-#endif // DSMR_INCLUDE_DSMR_H
