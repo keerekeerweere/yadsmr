@@ -113,7 +113,7 @@ struct _ParseResult<P, void> {
 template <typename T>
 struct ParseResult : public _ParseResult<ParseResult<T>, T> {
   const char *next = NULL;
-  const const char *err = NULL;
+  const char *err = NULL;
   const char *ctx = NULL;
 
   ParseResult& fail(const char  *err, const char* ctx = NULL) {
