@@ -22,7 +22,7 @@ CONF_REQUEST_PIN = "request_pin"
 
 # Hack to prevent compile error due to ambiguity with lib namespace
 dsmr_ns = cg.esphome_ns.namespace("esphome::yadsmr")
-Dsmr = dsmr_ns.class_("DBDsmr", cg.Component, uart.UARTDevice)
+Dsmr = dsmr_ns.class_("YaDsmr", cg.Component, uart.UARTDevice)
 
 
 def _validate_key(value):

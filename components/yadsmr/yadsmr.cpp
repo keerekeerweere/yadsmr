@@ -278,7 +278,7 @@ bool YaDsmr::parse_telegram() {
 }
 
 void YaDsmr::dump_config() {
-  ESP_LOGCONFIG(TAG, "DBDSMR:");
+  ESP_LOGCONFIG(TAG, "YaDSMR:");
   ESP_LOGCONFIG(TAG, "  Max telegram length: %d", this->max_telegram_len_);
   ESP_LOGCONFIG(TAG, "  Receive timeout: %.1fs", this->receive_timeout_ / 1e3f);
   if (this->request_pin_ != nullptr) {
