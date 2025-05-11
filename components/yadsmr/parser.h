@@ -332,6 +332,9 @@ struct P1Parser {
     // Skip /
     const char *data_start = str + 1;
 
+    // Look for ! that terminates the data
+    const char *data_end = data_start;
+
      if (check_crc)
       {
         uint16_t crc = _crc16_update(0, *str); // Include the / in CRC
