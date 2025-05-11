@@ -10,8 +10,8 @@
 #include "esphome/core/defines.h"
 
 // don't include <dsmr.h> because it puts everything in global namespace
-#include <dsmr/parser.h>
-#include <dsmr/fields.h>
+#include "dsmr/parser.h"
+#include "dsmr/fields.h"
 
 #include <vector>
 
